@@ -1,0 +1,6 @@
+@auth_HostAddress = http://localhost:5186
+
+# GET {{auth_HostAddress}}/api/account
+# Accept: application/json
+
+###
