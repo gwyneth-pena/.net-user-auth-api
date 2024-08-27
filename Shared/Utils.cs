@@ -9,14 +9,15 @@ namespace auth.Shared
 {
     public class Utils(
         IConfiguration configuration,
-        UserManager<User> userManager
-
+        UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager
     )
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly UserManager<User> _userManager = userManager;
+        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
-        public string generateToken(User user)
+        public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -52,7 +53,6 @@ namespace auth.Shared
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
 
     }
 }

@@ -12,7 +12,7 @@ using auth.Data;
 namespace auth.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240826085658_Initial")]
+    [Migration("20240827084413_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

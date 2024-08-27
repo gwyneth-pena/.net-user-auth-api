@@ -6,16 +6,15 @@ namespace auth.DTOs
     {
         [EmailAddress]
         [Required]
-        public string EmailAddress { get; set; } = string.Empty;
+        public required string EmailAddress { get; set; }
 
         [Required]
-        public string Password { get; set; } = string.Empty;
+        public required string Password { get; set; }
 
         [Required]
-        public string FullName { get; set; } = string.Empty;
+        public required string FullName { get; set; }
 
-        [Required]
-        public required List<string> Roles { get; set; }
+        public List<string>? Roles { get; set; }
 
     }
 }

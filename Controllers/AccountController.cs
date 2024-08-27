@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using auth.Shared;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.OpenApi.Any;
 
 namespace auth.Controllers
 {
@@ -20,6 +23,7 @@ namespace auth.Controllers
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly Utils _utils = utils;
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(RegisterDTO registerDTO)
         {
@@ -44,7 +48,7 @@ namespace auth.Controllers
 
             if (registerDTO.Roles == null)
             {
-                await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, "USER");
             }
             else
             {
@@ -61,6 +65,7 @@ namespace auth.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(LoginDTO loginDTO) 
         {
@@ -97,8 +102,37 @@ namespace auth.Controllers
             {
                 Message = "Login successfully!",
                 IsSuccess = true,
-                Token = _utils.generateToken(user)
+                Token = _utils.GenerateToken(user)
             });
         }
+
+        [Authorize]
+        [HttpGet("details")]
+        public async Task<ActionResult<UserDetailsDTO>> GetDetails()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return BadRequest(new AuthResponseDTO
+                {
+                    Message = "User not found",
+                    IsSuccess = false
+                });
+            }
+            else
+            {
+                return Ok(new UserDetailsDTO
+                {
+                    Email = user.Email,
+                    AccessFailedCount = user.AccessFailedCount,
+                    EmailConfirmed = user.EmailConfirmed,
+                    Roles = (List<string>)await _userManager.GetRolesAsync(user),
+                    PhoneNumber = user.PhoneNumber,
+                    FullName = user.FullName,
+                    Username = user.UserName
+                });
+            }
+        }
+    
     }
 }
