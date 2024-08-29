@@ -96,7 +96,7 @@ namespace auth.Controllers
             });
         }
 
-        [HttpPost("/assign")]
+        [HttpPost("/api/assign")]
         public async Task<ActionResult> AssignRole(AssignRoleDTO assignRole) {
 
             var role = await _roleManager.FindByNameAsync(assignRole.RoleName);
